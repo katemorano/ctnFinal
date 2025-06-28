@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NYC Budget Quiz</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      min-height: 100vh;
+      background: url('background_taxes.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: black;
+      text-align: center;
+      display: block;
+      position: relative;
+      padding-top: 80px; 
+      padding-bottom: 10px; 
+    }
+
+ 
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('backgroundImage.avif');
+      z-index: 0;
+    }
+
+ 
+    h1 {
+      font-size: 48px;
+      text-align: center;
+      color: white;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Intro Section */
+    .intro {
+      position: relative;
+      z-index: 1;
+      color: white;
+      padding: 20px 20px 20px; 
+      text-align: left;
+      background-color: #d4af37;
+      border-radius: 12px;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .intro h1 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .intro p {
+      font-size: 18px;
+      margin: 0;
+      text-align: center;
+      padding-top: 20px;
+    }
+
+    .quiz-container {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 50px 50px; 
+      margin-bottom: 50px;
+      border-radius: 12px;
+      margin: 0 auto 50px;
+      max-width: 650px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border: 3px solid #d4af37;
+    }
+
+    .question {
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: white;
+      background-color: #d4af37;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-size: 21px;
+    }
+
+    .quiz-score {
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: white;
+      background-color: #d4af37;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-size: 21px;
+    }
+
+    .options {
+      margin-bottom: 30px;
+      text-align: left;
+    }
+
+    .options label {
+      display: block;
+      padding: 14px 18px;
+      margin-bottom: 15px;
+      border: 2px solid #d4af37;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #f8f9fa;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+      font-size: 16px;
+    }
+
+    .options label:hover {
+      background-color: #d4af37;
+      border-color: #b18b0f;
+    }
+
+    .options label.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .options label.incorrect {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    .options label.dimmed {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .options label.disabled {
+      pointer-events: none;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 14px 24px;
+      border: none;
+      background-color: #d4af37;
+      color: white;
+      font-size: 15px;
+      font-weight: 900;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b18b0f;
+      transform: translateY(-2px);
+    }
+
+    .result {
+      margin-top: 30px;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .correct {
+      color: #28a745;
+      font-size: 25px; 
+    }
+
+    .incorrect {
+      color: #dc3545;
+      font-size: 25px;
+    }
+
+    .correct-answer {
+      margin-top: 10px;
+      padding: 14px;
+      background-color: white;
+      border: 2px solid #d4af37;
+      border-radius: 6px;
+      color: #b18b0f;
+      display: none;
+      font-size: 1rem;
+      text-align: left;
+    }
+
+    /* Responsiveness for smaller screens */
+    @media (max-width: 768px), (max-width: 480px) {
+      .quiz-container {
+        padding: 20px;
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Intro Section -->
+  <div class="intro">
+    <h1>NYC Budget Breakdown Quiz</h1>
+    <p>Think you've got a handle on the numbers that drive New York City's future? This quiz tests your knowledge with key figures from the 2025 budget. Are you ready to dive into the heart of NYC's 2025 budget and see how much you really know? Let's get started.</p>
+    <p id="byline"> By Kate Morano and Juan Lasso | Coding the News, Spring 2025 </p>
+  </div>
+
+<!-- === QUESTIONS START === -->
+<!-- Use the same structure for all 10 questions -->
+<!-- QUESTION 1 -->
+<div class="quiz-container">
+  <div class="question">
+    1) CUNY receives $1.37 billion from the city. That’s closest to what percentage of the total NYC budget?
+  </div>
+  <div class="options">
+    <label><input type="radio" name="q1" value="A"> A) 0.5%</label>
+    <label><input type="radio" name="q1" value="B"> B) 1%</label>
+    <label><input type="radio" name="q1" value="C"> C) 5%</label>
+    <label><input type="radio" name="q1" value="D"> D) 12%</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q1"></div>
+  <div class="correct-answer">Correct Answer: <strong>1%</strong> — CUNY’s $1.37 billion is about 1% of NYC’s $114.38 billion total budget.</div>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="quiz-container">
+  <div class="question"> 2) If you had to guess, which of these services costs the city the most money?</div>
+  <div class="options">
+    <label><input type="radio" name="q2" value="A"> A) Trash pickup and sanitation</label>
+    <label><input type="radio" name="q2" value="B"> B) Public schools and education</label>
+    <label><input type="radio" name="q2" value="C"> C) Police and emergency services</label>
+    <label><input type="radio" name="q2" value="D"> D) Public housing</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q2"></div>
+  <div class="correct-answer">Correct Answer: <strong>B) Public schools and education</strong> — Education is the city’s largest budget expenditure.</div>
+</div>
+
+<!-- QUESTION 3 -->
+<div class="quiz-container">
+  <div class="question"> 3) True or False: The Police Department’s $5.83 billion budget is larger than the entire budget for NYC’s public hospitals.</div>
+  <div class="options">
+    <label><input type="radio" name="q3" value="A"> A) True</label>
+    <label><input type="radio" name="q3" value="B"> B) False</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q3"></div>
+  <div class="correct-answer">Correct Answer: <strong>B) False</strong> — The Police Department’s budget is not larger than public hospitals.</div>
+</div>
+
+<!-- QUESTION 4 -->
+<div class="quiz-container">
+  <div class="question"> 4) Which department receives the least funding?</div>
+  <div class="options">
+    <label><input type="radio" name="q4" value="A"> A) Department of Correction</label>
+    <label><input type="radio" name="q4" value="B"> B) Department of Sanitation</label>
+    <label><input type="radio" name="q4" value="C"> C) Department of Environmental Protection</label>
+    <label><input type="radio" name="q4" value="D"> D) Department of Health + Mental Hygiene</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q4"></div>
+  <div class="correct-answer">Correct Answer: <strong>A) Department of Correction</strong> — This department receives the least funding.</div>
+</div>
+
+<!-- QUESTION 5 -->
+<div class="quiz-container">
+  <div class="question"> 5) Which department receives more funding than the NYPD?</div>
+  <div class="options">
+    <label><input type="radio" name="q5" value="A"> A) Fire Department</label>
+    <label><input type="radio" name="q5" value="B"> B) Department of Transportation</label>
+    <label><input type="radio" name="q5" value="C"> C) Department of Social Services</label>
+    <label><input type="radio" name="q5" value="D"> D) Youth and Community Development</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q5"></div>
+  <div class="correct-answer">Correct Answer: <strong>C) Department of Social Services</strong> — This department receives more funding than the NYPD.</div>
+</div>
+
+<!-- QUESTION 6 -->
+<div class="quiz-container">
+  <div class="question"> 6) What’s the single largest source of city revenue?</div>
+  <div class="options">
+    <label><input type="radio" name="q6" value="A"> A) Sales taxes</label>
+    <label><input type="radio" name="q6" value="B"> B) Property taxes</label>
+    <label><input type="radio" name="q6" value="C"> C) Income taxes</label>
+    <label><input type="radio" name="q6" value="D"> D) Federal aid</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q6"></div>
+  <div class="correct-answer">Correct Answer: <strong>B) Property taxes</strong> — Property taxes make up the largest portion of NYC revenue.</div>
+</div>
+
+<!-- QUESTION 7 -->
+<div class="quiz-container">
+  <div class="question"> 7) Roughly how much of NYC’s total budget comes from state or federal aid?</div>
+  <div class="options">
+    <label><input type="radio" name="q7" value="A"> A) 10%</label>
+    <label><input type="radio" name="q7" value="B"> B) 25%</label>
+    <label><input type="radio" name="q7" value="C"> C) 35%</label>
+    <label><input type="radio" name="q7" value="D"> D) 50%</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q7"></div>
+  <div class="correct-answer">Correct Answer: <strong>C) 35%</strong> — Around a third of the budget comes from outside aid.</div>
+</div>
+
+<!-- QUESTION 8 -->
+<div class="quiz-container">
+  <div class="question"> 8) Which agency has seen one of the biggest percentage increases in funding over the past 5 years?</div>
+  <div class="options">
+    <label><input type="radio" name="q8" value="A"> A) Department of Homeless Services</label>
+    <label><input type="radio" name="q8" value="B"> B) NYPD</label>
+    <label><input type="radio" name="q8" value="C"> C) Department of Correction</label>
+    <label><input type="radio" name="q8" value="D"> D) CUNY</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q8"></div>
+  <div class="correct-answer">Correct Answer: <strong>A) Department of Homeless Services</strong> — Its budget has grown significantly in recent years.</div>
+</div>
+
+<!-- QUESTION 9 -->
+<div class="quiz-container">
+  <div class="question"> 9) Which of these is closest to the Department of Education’s budget?</div>
+  <div class="options">
+    <label><input type="radio" name="q9" value="A"> A) $5 billion</label>
+    <label><input type="radio" name="q9" value="B"> B) $30 billion</label>
+    <label><input type="radio" name="q9" value="C"> C) $15 billion</label>
+    <label><input type="radio" name="q9" value="D"> D) $50 billion</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q9"></div>
+  <div class="correct-answer">Correct Answer: <strong> B) $30 billion</strong> — The DOE’s budget is roughly $30B annually.</div>
+</div>
+
+<!-- QUESTION 10 -->
+<div class="quiz-container">
+  <div class="question">10) What’s one reason NYC’s budget is so large?</div>
+  <div class="options">
+    <label><input type="radio" name="q10" value="A"> A) The city funds many services usually run by states</label>
+    <label><input type="radio" name="q10" value="B"> B) Because of corruption</label>
+    <label><input type="radio" name="q10" value="C"> C) It prints its own money</label>
+    <label><input type="radio" name="q10" value="D"> D) Wall Street pays for everything</label>
+  </div>
+  <button>SUBMIT</button>
+  <div class="result" id="result-q10"></div>
+  <div class="correct-answer">Correct Answer: <strong>A) The city funds many services usually run by states</strong></div>
+</div>
+<!-- === QUESTIONS END === -->
+
+<script>
+  const correctAnswers = {
+    q1: "B",
+    q2: "B",
+    q3: "B",
+    q4: "A",
+    q5: "C",
+    q6: "B",
+    q7: "C",
+    q8: "A",
+    q9: "B",
+    q10: "A",
+  
+  };
+
+  let score = 0;
+  let totalQuestions = Object.keys(correctAnswers).length;
+  let answeredQuestions = new Set();
+
+  document.querySelectorAll(".quiz-container").forEach((container, index) => {
+    const button = container.querySelector("button");
+    const questionId = `q${index + 1}`;
+
+    button.addEventListener("click", () => {
+      if (answeredQuestions.has(questionId)) return;
+
+      const selected = container.querySelector(`input[name="${questionId}"]:checked`);
+      const resultDiv = container.querySelector(".result");
+      const correctDiv = container.querySelector(".correct-answer");
+
+      if (!selected) {
+        resultDiv.textContent = "Please select an answer.";
+        resultDiv.className = "result incorrect";
+        return;
+      }
+
+      const labels = container.querySelectorAll("label");
+      labels.forEach(label => label.classList.add("dimmed"));
+
+      if (selected.value === correctAnswers[questionId]) {
+        score += 1;
+        selected.parentElement.classList.add("correct");
+        resultDiv.textContent = "Correct!";
+        resultDiv.className = "result correct";
+      } else {
+        selected.parentElement.classList.add("incorrect");
+        resultDiv.textContent = "Incorrect.";
+        resultDiv.className = "result incorrect";
+
+        // Highlight the correct answer
+        labels.forEach(label => {
+          if (label.textContent.includes(correctAnswers[questionId])) {
+            label.classList.add("correct");
+          }
+        });
+      }
+
+      correctDiv.style.display = "block";
+      answeredQuestions.add(questionId);
+
+      // Show final score if all answered
+      if (answeredQuestions.size === totalQuestions) {
+        document.getElementById("final-score").innerHTML = `
+          <div class="quiz-container">
+            <div class="quiz-score">🎉 Quiz Complete! Your final score is: <strong>${score}/${totalQuestions} 🎉</strong></div>
+            <button onclick="location.reload()">Retake Quiz</button>
+          </div>`;
+      }
+    });
+  });
+</script>
+
+<!-- Placeholder to show final score -->
+<div id="final-score"></div>
